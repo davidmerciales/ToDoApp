@@ -1,4 +1,4 @@
-package com.example.mvvmtodo.ui.theme
+package com.example.mvvmtodo.presenter.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

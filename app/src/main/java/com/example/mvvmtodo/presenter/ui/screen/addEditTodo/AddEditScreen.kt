@@ -1,9 +1,9 @@
-package com.example.mvvmtodo.ui.screen.addEditTodo
+package com.example.mvvmtodo.presenter.ui.screen.addEditTodo
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,25 +23,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mvvmtodo.utils.UiEvent
+import com.example.mvvmtodo.presenter.ui.navigation.AppController
+import com.example.mvvmtodo.presenter.ui.navigation.CollectEvents
 import com.example.mvvmtodo.utils.priorityToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,29 +42,14 @@ import com.example.mvvmtodo.utils.priorityToInt
 @Composable
 fun AddEditScreen(
     onPopBackStack:()->Unit,
-    viewModel: AddEditViewModel = hiltViewModel()
+    viewModel: AddEditViewModel = hiltViewModel(),
+    appController: AppController
 ){
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
-    val priorities = arrayOf("Critical", "High", "Medium", "Low")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select Priority")}
-
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect {event ->
-            when(event) {
-                is UiEvent.PopBackStack -> onPopBackStack()
-                is UiEvent.ShowSnackBar -> {
-                    snackbarHostState.showSnackbar(
-                        message = event.message,
-                        actionLabel = event.action
-                    )
-                }
-                else -> Unit
-            }
-        }
+    appController.CollectEvents(snackbarHostState = viewModel.state.snackbarHostState) {
+        Log.d("OnDoneClick", "AddEditScreen: ")
     }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -98,23 +74,24 @@ fun AddEditScreen(
                 },
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier
             .fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.OnEvent(AddEditEvent.OnPriorityChange(selectedText.priorityToInt()))
-                    viewModel.OnEvent(AddEditEvent.OnSaveTodo)
+                    viewModel.OnEvent(AddEditContract.AddEditEvent.OnPriorityChange(viewModel.state.selectedText.priorityToInt()))
+                    viewModel.OnEvent(AddEditContract.AddEditEvent.OnSaveTodo)
                 }) {
                 Icon(
                     Icons.Default.Check,
                     contentDescription = "Save")
             }
         },
-        content = {
+        content = { it ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(it)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             ) {
                 Box(
                     modifier = Modifier
@@ -123,30 +100,30 @@ fun AddEditScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     ExposedDropdownMenuBox(
-                        expanded = expanded,
+                        expanded = viewModel.state.expanded,
                         onExpandedChange = {
-                            expanded = !expanded
+                            viewModel.state.expanded = !viewModel.state.expanded
                         }
                     ) {
                         TextField(
-                            value = selectedText,
+                            value = viewModel.state.selectedText,
                             onValueChange = {},
                             readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.state.expanded) },
                             modifier = Modifier.menuAnchor()
                         )
 
                         ExposedDropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
+                            expanded = viewModel.state.expanded,
+                            onDismissRequest = { viewModel.state.expanded = false }
                         ) {
-                            priorities.forEach { item ->
+                            viewModel.state.priorities.forEach { item ->
                                 DropdownMenuItem(
                                     text = { Text(text = item) },
                                     onClick = {
-                                        selectedText = item
-                                        expanded = false
-                                        viewModel.OnEvent(AddEditEvent.OnPriorityChange(selectedText.priorityToInt()))
+                                        viewModel.state.selectedText = item
+                                        viewModel.state.expanded = false
+                                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnPriorityChange(viewModel.state.selectedText.priorityToInt()))
                                     }
                                 )
                             }
@@ -157,9 +134,9 @@ fun AddEditScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(50.dp, 0.dp, 50.dp, 0.dp),
-                    value = viewModel.title,
+                    value = viewModel.state.title,
                     onValueChange = {
-                        viewModel.OnEvent(AddEditEvent.OnTitleChange(it))
+                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnTitleChange(it))
                     },
                     placeholder = { Text(text = "Title")}
                 )
@@ -168,9 +145,9 @@ fun AddEditScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(50.dp, 0.dp, 50.dp, 0.dp),
-                    value = viewModel.description,
+                    value = viewModel.state.description,
                     onValueChange = {
-                        viewModel.OnEvent(AddEditEvent.OnDescriptionChange(it))
+                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnDescriptionChange(it))
                     },
                     placeholder = { Text(text = "Description")},
                     singleLine = false,
@@ -178,6 +155,5 @@ fun AddEditScreen(
                 )
             }
         }
-
     )
 }

@@ -6,9 +6,10 @@ import com.example.mvvmtodo.data.dao.TodoDao
 import com.example.mvvmtodo.data.model.Todo
 
 @Database(
-    entities = [Todo :: class],
-    version = 1)
+    entities = [Todo::class],
+    version = 1
+)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract val dao : TodoDao
+    abstract val dao: TodoDao
 }

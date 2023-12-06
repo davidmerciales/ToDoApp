@@ -1,11 +1,12 @@
 package com.example.mvvmtodo.data.di
 
 import android.app.Application
+import androidx.compose.material3.SnackbarHostState
 import androidx.room.Room
 import com.example.mvvmtodo.data.dao.TodoDao
 import com.example.mvvmtodo.data.db.AppDatabase
-import com.example.mvvmtodo.data.repository.TodoRepository
 import com.example.mvvmtodo.data.repository.TodoRepositoryImpl
+import com.example.mvvmtodo.domain.repository.TodoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,11 +19,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(app: Application) : AppDatabase {
+    fun provideAppDatabase(app: Application): AppDatabase {
         return Room.databaseBuilder(
             app,
             AppDatabase::class.java,
-            "todo.db")
+            "todo.db"
+        )
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -30,14 +32,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTodoDao(db :AppDatabase) : TodoDao {
+    fun provideTodoDao(db: AppDatabase): TodoDao {
         return db.dao
     }
 
     @Provides
     @Singleton
-    fun provideTodoRepositoryImpl(dao:TodoDao) : TodoRepository {
+    fun provideTodoRepositoryImpl(dao: TodoDao): TodoRepository {
         return TodoRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun ASDAD(): SnackbarHostState {
+        return SnackbarHostState()
     }
 
 }

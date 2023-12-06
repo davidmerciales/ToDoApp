@@ -2,9 +2,10 @@ package com.example.mvvmtodo.data.repository
 
 import com.example.mvvmtodo.data.dao.TodoDao
 import com.example.mvvmtodo.data.model.Todo
+import com.example.mvvmtodo.domain.repository.TodoRepository
 import kotlinx.coroutines.flow.Flow
 
-class TodoRepositoryImpl (private val dao : TodoDao) : TodoRepository {
+class TodoRepositoryImpl(private val dao: TodoDao) : TodoRepository {
 
     override suspend fun getTodoById(id: Int?): Todo {
         return dao.getTodoById(id)

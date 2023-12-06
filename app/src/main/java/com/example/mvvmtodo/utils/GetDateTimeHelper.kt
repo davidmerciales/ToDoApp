@@ -17,7 +17,7 @@ class GetDateTimeHelper {
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun LocalDateTime.toDateString() : String {
+fun LocalDateTime.toDateString(): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
     return this.format(formatter)
 }
