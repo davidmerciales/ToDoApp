@@ -1,4 +1,4 @@
-package com.example.mvvmtodo.presenter.ui.screen.todo_list
+package com.example.mvvmtodo.presenter.ui.screen.completedTodo
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,23 +10,22 @@ import com.example.mvvmtodo.domain.usecase.todolist.SortToDoListUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.UndoDeleteUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.MyController
+import com.example.mvvmtodo.presenter.ui.screen.todo_list.ToDoListContract
 import com.example.mvvmtodo.utils.Routes
 import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
-class TodoListViewModel @Inject constructor(
+class CompletedToDoViewModel @Inject constructor(
     private val repository: TodoRepository,
-    private val sortToDoListUseCase: SortToDoListUseCase,
     private val deleteToDoUseCase: DeleteToDoUseCase,
     private val insertToDoUseCase: InsertToDoUseCase,
     private val undoDeleteUseCase: UndoDeleteUseCase,
     appController: AppController
 ) : ViewModel(), MyController by appController {
-    val state: ToDoListContract.ToDoListState = ToDoListContract.MutableToDoListState()
+    val state: CompletedToDoContract.CompletedToDoState = CompletedToDoContract.MutableCompletedToDoListState()
 
     init {
         viewModelScope.launch {
@@ -35,23 +34,9 @@ class TodoListViewModel @Inject constructor(
             }
         }
     }
-
-    fun onEvent(event: ToDoListContract.TodoListEvent) {
+    fun onEvent(event: CompletedToDoContract.CompletedToEvent) {
         when (event) {
-            is ToDoListContract.TodoListEvent.OnSortClick -> {
-                Log.d("ViewModel", state.sortIsClicked.toString() + "Sort Val: "+event.sort)
-                viewModelScope.launch {
-                    state.todos = if (event.sort != null && event.sort != 0) {
-                        sortToDoListUseCase(event.sort)
-                    } else {
-                        val sortBy = if (state.sortIsClicked) 1 else 0
-                        sortToDoListUseCase(sortBy)
-                    }
-                    state.sortIsClicked = !state.sortIsClicked
-                }
-            }
-
-            is ToDoListContract.TodoListEvent.OnDeleteTodo -> {
+            is CompletedToDoContract.CompletedToEvent.OnDeleteTodo -> {
                 viewModelScope.launch {
                     state.deletedToDo = event.todo
                     deleteToDoUseCase(event.todo)
@@ -59,27 +44,20 @@ class TodoListViewModel @Inject constructor(
                 }
             }
 
-            is ToDoListContract.TodoListEvent.OnDoneTodo -> {
+            is CompletedToDoContract.CompletedToEvent.OnDoneTodo -> {
                 viewModelScope.launch {
                     insertToDoUseCase(event.todo, event.isChecked)
                 }
             }
 
-            is ToDoListContract.TodoListEvent.OnTodoItemClick -> {
-                viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
-                }
-
-            }
-
-            is ToDoListContract.TodoListEvent.OnAddEditTodo -> {
+            is CompletedToDoContract.CompletedToEvent.OnAddEditTodo -> {
                 Log.d("OnAddEvent", "TodoViewModel: ")
                 viewModelScope.launch {
                     sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO))
                 }
             }
 
-            is ToDoListContract.TodoListEvent.OnUndoDelete -> {
+            is CompletedToDoContract.CompletedToEvent.OnUndoDelete -> {
                 state.deletedToDo?.let {
                     viewModelScope.launch {
                         undoDeleteUseCase(it)
@@ -88,9 +66,9 @@ class TodoListViewModel @Inject constructor(
                 }
             }
 
-            is ToDoListContract.TodoListEvent.OnCompletedNavClick -> {
+            is CompletedToDoContract.CompletedToEvent.OnToDoNavClick -> {
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.COMPLETED_TODO))
+                    sendUiEvent(UiEvent.Navigate(Routes.TODO_LIST))
                 }
             }
         }

@@ -42,13 +42,13 @@ import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompletedToDoScreen(
-    viewModel: TodoListViewModel = hiltViewModel(),
+    viewModel: CompletedToDoViewModel = hiltViewModel(),
     appController: AppController
 ) {
 
     appController.CollectEvents(snackbarHostState = viewModel.state.snackbarHostState) { result ->
         if (result == SnackbarResult.ActionPerformed) {
-            viewModel.onEvent(ToDoListContract.TodoListEvent.OnUndoDelete)
+            viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnUndoDelete)
         }
     }
 
@@ -76,7 +76,7 @@ fun CompletedToDoScreen(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(.5f)
-                        .clickable {viewModel.onEvent(ToDoListContract.TodoListEvent.OnToDoNavClick) },
+                        .clickable {viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnToDoNavClick) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -112,7 +112,7 @@ fun CompletedToDoScreen(
             FloatingActionButton(
                 onClick = {
                     Log.d("OnAddClick", "TodoListScreen: ")
-                    viewModel.onEvent(ToDoListContract.TodoListEvent.OnAddEditTodo)
+                    viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnAddEditTodo)
                 }) {
                 Icon(
                     Icons.Default.Add,
@@ -132,18 +132,11 @@ fun CompletedToDoScreen(
                 ) {
                     items(viewModel.state.todos) {
                         if (it.isDone) {
-                            TodoItem(
+                            CompletedToDoItem(
                                 todo = it,
                                 onEvent = viewModel::onEvent,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable {
-                                        viewModel.onEvent(
-                                            ToDoListContract.TodoListEvent.OnTodoItemClick(
-                                                it
-                                            )
-                                        )
-                                    }
                                     .padding(16.dp))
                         }
                     }
