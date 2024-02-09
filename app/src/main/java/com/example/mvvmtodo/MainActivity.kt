@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                             navController.popBackStack()
                         }, appController = appController)
                     }
-                    composable(Routes.COMPLETED_TODO){
+                    composable(Routes.COMPLETED_TODO) {
                         CompletedToDoScreen(appController = appController)
                     }
                 }

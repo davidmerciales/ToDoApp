@@ -15,7 +15,6 @@ import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
@@ -39,7 +38,7 @@ class TodoListViewModel @Inject constructor(
     fun onEvent(event: ToDoListContract.TodoListEvent) {
         when (event) {
             is ToDoListContract.TodoListEvent.OnSortClick -> {
-                Log.d("ViewModel", state.sortIsClicked.toString() + "Sort Val: "+event.sort)
+                Log.d("ViewModel", state.sortIsClicked.toString() + "Sort Val: " + event.sort)
                 viewModelScope.launch {
                     state.todos = if (event.sort != null && event.sort != 0) {
                         sortToDoListUseCase(event.sort)

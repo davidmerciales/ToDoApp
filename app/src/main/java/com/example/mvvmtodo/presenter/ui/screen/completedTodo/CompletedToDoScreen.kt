@@ -35,9 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.CollectEvents
-import com.example.mvvmtodo.presenter.ui.screen.todo_list.ToDoListContract
-import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoItem
-import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +73,7 @@ fun CompletedToDoScreen(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(.5f)
-                        .clickable {viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnToDoNavClick) },
+                        .clickable { viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnToDoNavClick) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -137,7 +134,8 @@ fun CompletedToDoScreen(
                                 onEvent = viewModel::onEvent,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp))
+                                    .padding(16.dp)
+                            )
                         }
                     }
                 }

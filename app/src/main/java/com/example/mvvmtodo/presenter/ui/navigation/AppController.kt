@@ -12,8 +12,6 @@ import androidx.navigation.NavController
 import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -22,6 +20,7 @@ import javax.inject.Inject
 interface MyController {
     suspend fun sendUiEvent(event: UiEvent)
 }
+
 @ActivityRetainedScoped
 class AppController @Inject constructor(
 ) : MyController {
@@ -31,24 +30,26 @@ class AppController @Inject constructor(
 
     lateinit var navController: NavController
 
-    override suspend fun sendUiEvent(event: UiEvent){
+    override suspend fun sendUiEvent(event: UiEvent) {
         _uiEvent.send(event)
     }
 }
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun AppController.CollectEvents(snackbarHostState: SnackbarHostState, onResult: (SnackbarResult) -> Unit) {
+fun AppController.CollectEvents(
+    snackbarHostState: SnackbarHostState, onResult: (SnackbarResult) -> Unit
+) {
     val context = LocalContext.current
-    val scope  = rememberCoroutineScope()
-    LaunchedEffect(key1 = true){
-        uiEvent.collect {event ->
-            when(event) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        uiEvent.collect { event ->
+            when (event) {
                 is UiEvent.PopBackStack -> navController.popBackStack()
                 is UiEvent.Navigate -> navController.navigate(event.route)
                 is UiEvent.ShowSnackBar -> {
                     scope.launch {
-                        val result =  snackbarHostState.showSnackbar(
+                        val result = snackbarHostState.showSnackbar(
                             message = event.message,
                             actionLabel = event.action,
                             duration = SnackbarDuration.Short

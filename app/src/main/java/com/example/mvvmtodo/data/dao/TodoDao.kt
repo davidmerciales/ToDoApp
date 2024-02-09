@@ -12,16 +12,16 @@ import kotlinx.coroutines.flow.Flow
 interface TodoDao {
 
     @Query("Select * from todo where id = :id")
-    suspend fun getTodoById(id: Int?) : Todo
+    suspend fun getTodoById(id: Int?): Todo
 
     @Query("Select * from todo order by priority DESC")
-    suspend fun getSortedTodosByDesc() : List<Todo>
+    suspend fun getSortedTodosByDesc(): List<Todo>
 
     @Query("Select * from todo order by priority ASC")
-    suspend fun getSortedTodosByAsc() : List<Todo>
+    suspend fun getSortedTodosByAsc(): List<Todo>
 
     @Query("Select * from todo order by date DESC")
-    suspend fun getSortedTodosByRecent() : List<Todo>
+    suspend fun getSortedTodosByRecent(): List<Todo>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTodo(todo: Todo)

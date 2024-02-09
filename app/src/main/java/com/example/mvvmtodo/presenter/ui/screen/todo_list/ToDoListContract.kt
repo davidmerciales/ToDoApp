@@ -2,7 +2,6 @@ package com.example.mvvmtodo.presenter.ui.screen.todo_list
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.mvvmtodo.data.model.Todo
@@ -13,7 +12,7 @@ class ToDoListContract {
         data class OnDeleteTodo(val todo: Todo) : TodoListEvent
         data class OnDoneTodo(val todo: Todo, val isChecked: Boolean) : TodoListEvent
         data class OnTodoItemClick(val todo: Todo) : TodoListEvent
-        data class OnSortClick(val sort: Int?=0) : TodoListEvent
+        data class OnSortClick(val sort: Int? = 0) : TodoListEvent
         data object OnAddEditTodo : TodoListEvent
         data object OnUndoDelete : TodoListEvent
         data object OnCompletedNavClick : TodoListEvent

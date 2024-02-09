@@ -6,11 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.mvvmtodo.domain.repository.TodoRepository
 import com.example.mvvmtodo.domain.usecase.todolist.DeleteToDoUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.InsertToDoUseCase
-import com.example.mvvmtodo.domain.usecase.todolist.SortToDoListUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.UndoDeleteUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.MyController
-import com.example.mvvmtodo.presenter.ui.screen.todo_list.ToDoListContract
 import com.example.mvvmtodo.utils.Routes
 import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +23,8 @@ class CompletedToDoViewModel @Inject constructor(
     private val undoDeleteUseCase: UndoDeleteUseCase,
     appController: AppController
 ) : ViewModel(), MyController by appController {
-    val state: CompletedToDoContract.CompletedToDoState = CompletedToDoContract.MutableCompletedToDoListState()
+    val state: CompletedToDoContract.CompletedToDoState =
+        CompletedToDoContract.MutableCompletedToDoListState()
 
     init {
         viewModelScope.launch {
@@ -34,6 +33,7 @@ class CompletedToDoViewModel @Inject constructor(
             }
         }
     }
+
     fun onEvent(event: CompletedToDoContract.CompletedToEvent) {
         when (event) {
             is CompletedToDoContract.CompletedToEvent.OnDeleteTodo -> {

@@ -41,10 +41,10 @@ import com.example.mvvmtodo.utils.priorityToInt
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddEditScreen(
-    onPopBackStack:()->Unit,
+    onPopBackStack: () -> Unit,
     viewModel: AddEditViewModel = hiltViewModel(),
     appController: AppController
-){
+) {
 
     appController.CollectEvents(snackbarHostState = viewModel.state.snackbarHostState) {
         Log.d("OnDoneClick", "AddEditScreen: ")
@@ -65,7 +65,7 @@ fun AddEditScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {onPopBackStack()}) {
+                    IconButton(onClick = { onPopBackStack() }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -84,7 +84,8 @@ fun AddEditScreen(
                 }) {
                 Icon(
                     Icons.Default.Check,
-                    contentDescription = "Save")
+                    contentDescription = "Save"
+                )
             }
         },
         content = { it ->
@@ -96,7 +97,7 @@ fun AddEditScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(0.dp, 20.dp, 0.dp, 15.dp),
+                        .padding(top = 20.dp, bottom = 15.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     ExposedDropdownMenuBox(
@@ -123,7 +124,11 @@ fun AddEditScreen(
                                     onClick = {
                                         viewModel.state.selectedText = item
                                         viewModel.state.expanded = false
-                                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnPriorityChange(viewModel.state.selectedText.priorityToInt()))
+                                        viewModel.OnEvent(
+                                            AddEditContract.AddEditEvent.OnPriorityChange(
+                                                viewModel.state.selectedText.priorityToInt()
+                                            )
+                                        )
                                     }
                                 )
                             }
@@ -133,23 +138,23 @@ fun AddEditScreen(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(50.dp, 0.dp, 50.dp, 0.dp),
+                        .padding(start = 50.dp, end = 50.dp),
                     value = viewModel.state.title,
                     onValueChange = {
                         viewModel.OnEvent(AddEditContract.AddEditEvent.OnTitleChange(it))
                     },
-                    placeholder = { Text(text = "Title")}
+                    placeholder = { Text(text = "Title") }
                 )
                 Spacer(modifier = Modifier.padding(6.dp))
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(50.dp, 0.dp, 50.dp, 0.dp),
+                        .padding(start = 50.dp, end = 50.dp),
                     value = viewModel.state.description,
                     onValueChange = {
                         viewModel.OnEvent(AddEditContract.AddEditEvent.OnDescriptionChange(it))
                     },
-                    placeholder = { Text(text = "Description")},
+                    placeholder = { Text(text = "Description") },
                     singleLine = false,
                     maxLines = 5
                 )
