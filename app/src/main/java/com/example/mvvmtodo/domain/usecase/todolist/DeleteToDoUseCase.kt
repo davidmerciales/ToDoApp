@@ -10,5 +10,4 @@ class DeleteToDoUseCase @Inject constructor(
     suspend operator fun invoke(todo: Todo) {
         repository.deleteTodo(todo)
     }
-
 }

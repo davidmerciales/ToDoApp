@@ -9,7 +9,6 @@ class TodoRepositoryImpl(private val dao: TodoDao) : TodoRepository {
 
     override suspend fun getTodoById(id: Int?): Todo {
         return dao.getTodoById(id)
-
     }
 
     override suspend fun getSortedTodosByDesc(): List<Todo> {

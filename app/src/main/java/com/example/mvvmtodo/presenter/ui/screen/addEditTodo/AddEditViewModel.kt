@@ -66,7 +66,7 @@ class AddEditViewModel @Inject constructor(
                         Todo(
                             title = state.title,
                             description = state.description,
-                            isDone = state.todo?.isDone ?: false,
+                            isDone = state. todo?.isDone ?: false,
                             date = currentDateTime,
                             priority = state.priority,
                             id = state.todo?.id
