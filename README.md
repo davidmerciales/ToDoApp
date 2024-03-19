@@ -13,8 +13,6 @@ Jetpack compose ToDo app
 ```kotlin
 ```
 ```toml
-[libraries]
-calendar = {group = "io.github.ronjunevaldoz", name ="kmp-calendar-android", version.ref ="calendar"}
 ```
 ## Usage
 ```kotlin
