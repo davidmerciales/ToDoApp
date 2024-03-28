@@ -9,8 +9,9 @@ import com.example.mvvmtodo.domain.usecase.todolist.InsertToDoUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.UndoDeleteUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.MyController
+import com.example.mvvmtodo.utils.MessageEvent
+import com.example.mvvmtodo.utils.NavEvent
 import com.example.mvvmtodo.utils.Routes
-import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class CompletedToDoViewModel @Inject constructor(
                 viewModelScope.launch {
                     state.deletedToDo = event.todo
                     deleteToDoUseCase(event.todo)
-                    sendUiEvent(UiEvent.ShowSnackBar("Item Deleted!", "Undo"))
+                    sendUiEvent(MessageEvent.ShowSnackBar("Item Deleted!", "Undo"))
                 }
             }
 
@@ -53,7 +54,7 @@ class CompletedToDoViewModel @Inject constructor(
             is CompletedToDoContract.CompletedToEvent.OnAddEditTodo -> {
                 Log.d("OnAddEvent", "TodoViewModel: ")
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO))
+                    sendUiEvent(NavEvent.Navigate(Routes.ADD_EDIT_TODO))
                 }
             }
 
@@ -61,14 +62,14 @@ class CompletedToDoViewModel @Inject constructor(
                 state.deletedToDo?.let {
                     viewModelScope.launch {
                         undoDeleteUseCase(it)
-                        sendUiEvent(UiEvent.ShowSnackBar("Undo Deleted Item"))
+                        sendUiEvent(MessageEvent.ShowSnackBar("Undo Deleted Item"))
                     }
                 }
             }
 
             is CompletedToDoContract.CompletedToEvent.OnToDoNavClick -> {
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.TODO_LIST))
+                    sendUiEvent(NavEvent.Navigate(Routes.TODO_LIST))
                 }
             }
         }

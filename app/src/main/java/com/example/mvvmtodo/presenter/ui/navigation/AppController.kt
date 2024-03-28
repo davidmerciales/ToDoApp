@@ -9,7 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.mvvmtodo.utils.UiEvent
+import com.example.mvvmtodo.utils.MessageEvent
+import com.example.mvvmtodo.utils.NavEvent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -18,36 +19,59 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface MyController {
-    suspend fun sendUiEvent(event: UiEvent)
+    suspend fun sendUiEvent(event: NavEvent)
+    suspend fun sendUiEvent(event: MessageEvent)
 }
 
 @ActivityRetainedScoped
 class AppController @Inject constructor(
 ) : MyController {
 
-    private val _uiEvent = Channel<UiEvent>()
+    private val _uiEvent = Channel<NavEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private val _msgEvent = Channel<MessageEvent>()
+    val msgEvent = _msgEvent.receiveAsFlow()
 
     lateinit var navController: NavController
 
-    override suspend fun sendUiEvent(event: UiEvent) {
+    override suspend fun sendUiEvent(event: NavEvent) {
         _uiEvent.send(event)
+    }
+
+    override suspend fun sendUiEvent(event: MessageEvent) {
+        _msgEvent.send(event)
     }
 }
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun AppController.CollectEvents(
-    snackbarHostState: SnackbarHostState, onResult: (SnackbarResult) -> Unit
+fun AppController.CollectRoutes(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
             when (event) {
-                is UiEvent.PopBackStack -> navController.popBackStack()
-                is UiEvent.Navigate -> navController.navigate(event.route)
-                is UiEvent.ShowSnackBar -> {
+                is NavEvent.PopBackStack -> navController.popBackStack()
+                is NavEvent.Navigate -> navController.navigate(event.route)
+            }
+        }
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+@Composable
+fun AppController.CollectMessages(
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    onResult: (SnackbarResult) -> Unit
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        msgEvent.collect { event ->
+            when (event) {
+                is MessageEvent.ShowSnackBar -> {
                     scope.launch {
                         val result = snackbarHostState.showSnackbar(
                             message = event.message,
@@ -57,7 +81,8 @@ fun AppController.CollectEvents(
                         onResult(result)
                     }
                 }
-                is UiEvent.ShowToastMessage -> {
+
+                is MessageEvent.ShowToastMessage -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
             }

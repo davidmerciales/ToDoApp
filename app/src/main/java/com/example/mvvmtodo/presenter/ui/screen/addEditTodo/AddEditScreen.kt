@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
-import com.example.mvvmtodo.presenter.ui.navigation.CollectEvents
+import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
 import com.example.mvvmtodo.utils.priorityToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,7 @@ fun AddEditScreen(
     appController: AppController
 ) {
 
-    appController.CollectEvents(snackbarHostState = viewModel.state.snackbarHostState) {
+    appController.CollectMessages(snackbarHostState = viewModel.state.snackbarHostState) {
         Log.d("OnDoneClick", "AddEditScreen: ")
     }
 

@@ -10,8 +10,9 @@ import com.example.mvvmtodo.domain.usecase.todolist.SortToDoListUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.UndoDeleteUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.MyController
+import com.example.mvvmtodo.utils.MessageEvent
+import com.example.mvvmtodo.utils.NavEvent
 import com.example.mvvmtodo.utils.Routes
-import com.example.mvvmtodo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,7 +55,7 @@ class TodoListViewModel @Inject constructor(
                 viewModelScope.launch {
                     state.deletedToDo = event.todo
                     deleteToDoUseCase(event.todo)
-                    sendUiEvent(UiEvent.ShowSnackBar("Item Deleted!", "Undo"))
+                    sendUiEvent(MessageEvent.ShowSnackBar("Item Deleted!", "Undo"))
                 }
             }
 
@@ -66,7 +67,7 @@ class TodoListViewModel @Inject constructor(
 
             is ToDoListContract.TodoListEvent.OnTodoItemClick -> {
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
+                    sendUiEvent(NavEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
                 }
 
             }
@@ -74,7 +75,7 @@ class TodoListViewModel @Inject constructor(
             is ToDoListContract.TodoListEvent.OnAddEditTodo -> {
                 Log.d("OnAddEvent", "TodoViewModel: ")
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO))
+                    sendUiEvent(NavEvent.Navigate(Routes.ADD_EDIT_TODO))
                 }
             }
 
@@ -82,14 +83,14 @@ class TodoListViewModel @Inject constructor(
                 state.deletedToDo?.let {
                     viewModelScope.launch {
                         undoDeleteUseCase(it)
-                        sendUiEvent(UiEvent.ShowSnackBar("Undo Deleted Item"))
+                        sendUiEvent(MessageEvent.ShowSnackBar("Undo Deleted Item"))
                     }
                 }
             }
 
             is ToDoListContract.TodoListEvent.OnCompletedNavClick -> {
                 viewModelScope.launch {
-                    sendUiEvent(UiEvent.Navigate(Routes.COMPLETED_TODO))
+                    sendUiEvent(NavEvent.Navigate(Routes.COMPLETED_TODO))
                 }
             }
         }

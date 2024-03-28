@@ -10,7 +10,8 @@ import com.example.mvvmtodo.domain.repository.TodoRepository
 import com.example.mvvmtodo.domain.usecase.todolist.InsertToDoUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.MyController
-import com.example.mvvmtodo.utils.UiEvent
+import com.example.mvvmtodo.utils.MessageEvent
+import com.example.mvvmtodo.utils.NavEvent
 import com.example.mvvmtodo.utils.toDateString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -59,20 +60,20 @@ class AddEditViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     if (state.title.isBlank()) {
-                        sendUiEvent(UiEvent.ShowToastMessage("Title must not be empty!"))
+                        sendUiEvent(MessageEvent.ShowToastMessage("Title must not be empty!"))
                         return@launch
                     }
                     insertToDoUseCase(
                         Todo(
                             title = state.title,
                             description = state.description,
-                            isDone = state. todo?.isDone ?: false,
+                            isDone = state.todo?.isDone ?: false,
                             date = currentDateTime,
                             priority = state.priority,
                             id = state.todo?.id
                         ), state.todo?.isDone ?: false
                     )
-                    sendUiEvent(UiEvent.PopBackStack)
+                    sendUiEvent(NavEvent.PopBackStack)
                 }
             }
         }

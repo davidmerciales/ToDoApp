@@ -5,6 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,8 +20,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mvvmtodo.presenter.theme.MVVMToDoTheme
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
+import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
+import com.example.mvvmtodo.presenter.ui.navigation.CollectRoutes
 import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.AddEditScreen
 import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoScreen
+import com.example.mvvmtodo.presenter.ui.screen.login.LoginScreen
 import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListScreen
 import com.example.mvvmtodo.utils.Routes
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,10 +42,16 @@ class MainActivity : ComponentActivity() {
             MVVMToDoTheme {
                 val navController = rememberNavController()
                 appController.navController = navController
+                appController.CollectRoutes()
+
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.TODO_LIST
+                    startDestination = Routes.LOGIN
                 ) {
+
+                    composable(Routes.LOGIN) {
+                        LoginScreen()
+                    }
 
                     composable(Routes.TODO_LIST) {
                         TodoListScreen(
@@ -61,4 +78,26 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+val LocalNavigation = compositionLocalOf<String> {
+    throw Exception("No local navigation")
+}
+
+@Composable
+fun NavigationContext(
+    snackbarHostState: SnackbarHostState,
+    appController: AppController,
+    context: @Composable () -> Unit
+) {
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
+    appController.CollectMessages(snackbarHostState = snackbarHostState) { result ->
+        if (result == SnackbarResult.ActionPerformed) {
+            isChecked = true
+        }
+    }
+
+    context()
 }

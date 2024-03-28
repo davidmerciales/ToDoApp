@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
-import com.example.mvvmtodo.presenter.ui.navigation.CollectEvents
+import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +43,7 @@ fun CompletedToDoScreen(
     appController: AppController
 ) {
 
-    appController.CollectEvents(snackbarHostState = viewModel.state.snackbarHostState) { result ->
+    appController.CollectMessages(snackbarHostState = viewModel.state.snackbarHostState) { result ->
         if (result == SnackbarResult.ActionPerformed) {
             viewModel.onEvent(CompletedToDoContract.CompletedToEvent.OnUndoDelete)
         }
