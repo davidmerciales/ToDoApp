@@ -32,6 +32,10 @@ class TodoListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getTodos().collect { todoListRaw ->
                 state.todos = todoListRaw
+
+                state.completedTask = state.todos.filter {
+                    it.isDone
+                }.size
             }
         }
     }

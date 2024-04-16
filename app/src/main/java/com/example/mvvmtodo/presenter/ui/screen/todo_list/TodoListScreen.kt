@@ -85,7 +85,7 @@ fun TaskManagementScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Content(viewModel.state.todos, viewModel::onEvent)
+                Content(viewModel.state, viewModel.state.todos, viewModel::onEvent)
             }
         }
     )
@@ -95,6 +95,7 @@ fun TaskManagementScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Content(
+    state: ToDoListContract.ToDoListState,
     list: List<Todo>,
     onEvent: (ToDoListContract.TodoListEvent) -> Unit
 ) {
@@ -187,7 +188,7 @@ fun Content(
                         )
                     )
                     Text(
-                        text = "30/40 task done",
+                        text = "${state.completedTask}/${state.todos.size}",
                         style = TextStyle(
                             fontSize = 16.sp,
                             platformStyle = PlatformTextStyle(
