@@ -25,7 +25,7 @@ import com.example.mvvmtodo.presenter.ui.navigation.CollectRoutes
 import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.AddEditScreen
 import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoScreen
 import com.example.mvvmtodo.presenter.ui.screen.login.LoginScreen
-import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListScreen
+import com.example.mvvmtodo.presenter.ui.screen.todo_list.TaskManagementScreen
 import com.example.mvvmtodo.utils.Routes
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -54,9 +54,10 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(Routes.TODO_LIST) {
-                        TodoListScreen(
-                            appController = appController
-                        )
+                        TaskManagementScreen()
+//                        TodoListScreen(
+//                            appController = appController
+//                        )
                     }
                     composable(
                         route = Routes.ADD_EDIT_TODO + "?todoId={todoId}",
