@@ -14,7 +14,7 @@ class GetDateTimeHelper {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentDateTime(): String {
         val currentDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+        val formatter = DateTimeFormatter.ofPattern("MMM dd")
         return currentDateTime.format(formatter)
     }
 }

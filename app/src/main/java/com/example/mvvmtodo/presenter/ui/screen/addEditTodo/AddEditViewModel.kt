@@ -67,11 +67,11 @@ class AddEditViewModel @Inject constructor(
                         Todo(
                             title = state.title,
                             description = state.description,
-                            isDone = state.todo?.isDone ?: false,
+                            isDone = state.isDone,
                             date = currentDateTime,
                             priority = state.priority,
                             id = state.todo?.id
-                        ), state.todo?.isDone ?: false
+                        ), state.isDone
                     )
                     sendUiEvent(NavEvent.PopBackStack)
                 }

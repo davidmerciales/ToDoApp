@@ -22,7 +22,7 @@ import com.example.mvvmtodo.presenter.theme.MVVMToDoTheme
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
 import com.example.mvvmtodo.presenter.ui.navigation.CollectRoutes
-import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.AddEditScreen
+import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.TaskAddEditScreen
 import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoScreen
 import com.example.mvvmtodo.presenter.ui.screen.login.LoginScreen
 import com.example.mvvmtodo.presenter.ui.screen.todo_list.TaskManagementScreen
@@ -68,10 +68,12 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
-                        AddEditScreen(onPopBackStack = {
-                            navController.popBackStack()
-                        }, appController = appController)
+//                        AddEditScreen(onPopBackStack = {
+//                            navController.popBackStack()
+//                        }, appController = appController)
+                        TaskAddEditScreen(onPopBackStack = { navController.popBackStack() })
                     }
+
                     composable(Routes.COMPLETED_TODO) {
                         CompletedToDoScreen(appController = appController)
                     }

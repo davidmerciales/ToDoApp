@@ -3,6 +3,7 @@ package com.example.mvvmtodo.presenter.ui.screen.todo_list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mvvmtodo.data.model.Todo
 import com.example.mvvmtodo.domain.repository.TodoRepository
 import com.example.mvvmtodo.domain.usecase.todolist.DeleteToDoUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.InsertToDoUseCase
@@ -36,8 +37,11 @@ class TodoListViewModel @Inject constructor(
                 state.completedTask = state.todos.filter {
                     it.isDone
                 }.size
+
+                state.completedTaskPercentage = calculateCompletionPercentage(state.todos)
             }
         }
+        Log.d("afasasfasfas", state.completedTaskPercentage.toInt().toString())
     }
 
     fun onEvent(event: ToDoListContract.TodoListEvent) {
@@ -99,4 +103,11 @@ class TodoListViewModel @Inject constructor(
             }
         }
     }
+
+    private fun calculateCompletionPercentage(list: List<Todo>): Double {
+        if (list.isEmpty()) return 0.0
+
+        return (state.completedTask.toDouble() / list.size) * 100
+    }
+
 }

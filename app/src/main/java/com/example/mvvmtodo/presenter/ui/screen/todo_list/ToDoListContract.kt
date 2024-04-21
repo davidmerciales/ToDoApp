@@ -2,6 +2,7 @@ package com.example.mvvmtodo.presenter.ui.screen.todo_list
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,6 +26,7 @@ class ToDoListContract {
         var sortIsClicked: Boolean
         var snackbarHostState: SnackbarHostState
         var completedTask: Int
+        var completedTaskPercentage: Double
     }
 
     class MutableToDoListState : ToDoListState {
@@ -33,5 +35,6 @@ class ToDoListContract {
         override var sortIsClicked: Boolean by mutableStateOf(false)
         override var snackbarHostState: SnackbarHostState = SnackbarHostState()
         override var completedTask: Int by mutableIntStateOf(0)
+        override var completedTaskPercentage: Double by mutableDoubleStateOf(0.0)
     }
 }

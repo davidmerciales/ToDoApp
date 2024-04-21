@@ -28,6 +28,7 @@ class AddEditContract {
         var selectedText: String
         var priorities: List<String>
         var snackbarHostState: SnackbarHostState
+        var isDone: Boolean
     }
 
     class MutableAddEditState : AddEditState {
@@ -46,6 +47,6 @@ class AddEditContract {
             )
         )
         override var snackbarHostState: SnackbarHostState = SnackbarHostState()
-
+        override var isDone: Boolean by mutableStateOf(false)
     }
 }

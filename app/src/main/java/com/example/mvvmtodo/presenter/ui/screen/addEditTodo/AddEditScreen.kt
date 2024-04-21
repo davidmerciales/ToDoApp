@@ -1,162 +1,251 @@
 package com.example.mvvmtodo.presenter.ui.screen.addEditTodo
 
-import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.mvvmtodo.presenter.ui.navigation.AppController
-import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
-import com.example.mvvmtodo.utils.priorityToInt
+import com.example.mvvmtodo.presenter.theme.Purple40
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditScreen(
+fun TaskAddEditScreen(
     onPopBackStack: () -> Unit,
-    viewModel: AddEditViewModel = hiltViewModel(),
-    appController: AppController
+    viewModel: AddEditViewModel = hiltViewModel()
 ) {
-
-    appController.CollectMessages(snackbarHostState = viewModel.state.snackbarHostState) {
-        Log.d("OnDoneClick", "AddEditScreen: ")
-    }
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Purple40
                 ),
                 title = {
                     Text(
-                        "Create New ToDo",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Details",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center
+                        )
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { onPopBackStack() }) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            tint = Color.White,
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "back"
                         )
-                    }
-                },
-            )
-        },
-        modifier = Modifier
-            .fillMaxSize(),
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.OnEvent(AddEditContract.AddEditEvent.OnPriorityChange(viewModel.state.selectedText.priorityToInt()))
-                    viewModel.OnEvent(AddEditContract.AddEditEvent.OnSaveTodo)
-                }) {
-                Icon(
-                    Icons.Default.Check,
-                    contentDescription = "Save"
-                )
-            }
-        },
-        content = { it ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 15.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    ExposedDropdownMenuBox(
-                        expanded = viewModel.state.expanded,
-                        onExpandedChange = {
-                            viewModel.state.expanded = !viewModel.state.expanded
-                        }
-                    ) {
-                        TextField(
-                            value = viewModel.state.selectedText,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.state.expanded) },
-                            modifier = Modifier.menuAnchor()
-                        )
-
-                        ExposedDropdownMenu(
-                            expanded = viewModel.state.expanded,
-                            onDismissRequest = { viewModel.state.expanded = false }
-                        ) {
-                            viewModel.state.priorities.forEach { item ->
-                                DropdownMenuItem(
-                                    text = { Text(text = item) },
-                                    onClick = {
-                                        viewModel.state.selectedText = item
-                                        viewModel.state.expanded = false
-                                        viewModel.OnEvent(
-                                            AddEditContract.AddEditEvent.OnPriorityChange(
-                                                viewModel.state.selectedText.priorityToInt()
-                                            )
-                                        )
-                                    }
-                                )
-                            }
-                        }
                     }
                 }
-                TextField(
+            )
+        },
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .padding(it)
+                    .wrapContentSize()
+            ) {
+
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 50.dp, end = 50.dp),
-                    value = viewModel.state.title,
-                    onValueChange = {
-                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnTitleChange(it))
+                        .fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .background(
+                                Purple40,
+                                RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+                            )
+                            .fillMaxHeight(0.18f)
+                    ) {
+
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 15.dp)
+                                .offset(y = (10).dp)
+                                .zIndex(1f),
+                            text = "Task title",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 13.sp,
+                                platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false
+                                )
+                            )
+                        )
+
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            ),
+                            value = viewModel.state.title,
+                            onValueChange = { title ->
+                                viewModel.state.title = title
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Enter Title",
+                                    style = TextStyle(
+                                        color = Color.White,
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.W500,
+                                        platformStyle = PlatformTextStyle(
+                                            includeFontPadding = false
+                                        )
+                                    )
+                                )
+                            },
+                            singleLine = false,
+                            maxLines = 5
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 15.dp)
+                                .offset(y = (10).dp)
+                                .zIndex(1f),
+                            text = "Due Date",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 13.sp,
+                                platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false
+                                )
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 15.dp)
+                            .offset(y = (10).dp)
+                            .zIndex(1f),
+                        text = "Descriptions",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.W500,
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(0.92f),
+                            value = viewModel.state.description,
+                            onValueChange = { description ->
+                                viewModel.state.description = description
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            label = { Text(text = "Enter desciption") },
+                            singleLine = false,
+                            minLines = 5,
+                            maxLines = 5
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            modifier = Modifier,
+                            checked = viewModel.state.isDone,
+                            onCheckedChange = {
+                                viewModel.state.isDone = !viewModel.state.isDone
+                            })
+
+                        Text(
+                            text = "Mark as done",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 17.sp,
+                                platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.075f)
+                    .padding(horizontal = 15.dp)
+                    .background(Purple40, RoundedCornerShape(15.dp))
+                    .clickable {
+                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnSaveTodo)
                     },
-                    placeholder = { Text(text = "Title") }
-                )
-                Spacer(modifier = Modifier.padding(6.dp))
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 50.dp, end = 50.dp),
-                    value = viewModel.state.description,
-                    onValueChange = {
-                        viewModel.OnEvent(AddEditContract.AddEditEvent.OnDescriptionChange(it))
-                    },
-                    placeholder = { Text(text = "Description") },
-                    singleLine = false,
-                    maxLines = 5
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Save",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    )
                 )
             }
         }

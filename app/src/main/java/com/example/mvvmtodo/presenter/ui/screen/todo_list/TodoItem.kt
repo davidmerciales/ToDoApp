@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -145,6 +146,7 @@ fun TodoItem(
             Text(
                 text = item.title,
                 style = TextStyle(
+                    textDecoration = if (item.isDone) TextDecoration.LineThrough else null,
                     color = Color.White,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.W600,
@@ -160,6 +162,7 @@ fun TodoItem(
                 modifier = Modifier.padding(start = 5.dp),
                 text = item.description,
                 style = TextStyle(
+                    textDecoration = if (item.isDone) TextDecoration.LineThrough else null,
                     color = Color.White,
                     fontSize = 14.sp,
                     platformStyle = PlatformTextStyle(
