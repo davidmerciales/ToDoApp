@@ -20,17 +20,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mvvmtodo.presenter.theme.Purple40
 import com.example.mvvmtodo.utils.GetDateTimeHelper
 
 @RequiresApi(Build.VERSION_CODES.O)
+@Preview
 @Composable
 fun TaskScreenTaskProgress(
-    completedTask: Int,
-    totalTask: Int,
-    completeTaskPercent: Double
+    completedTask: Int = 1,
+    totalTask: Int = 1,
+    completeTaskPercent: Double = 0.0
 ) {
 
     Box(
@@ -41,10 +43,8 @@ fun TaskScreenTaskProgress(
     ) {
         Row(
             modifier = Modifier.padding(
-                start = 25.dp,
-                end = 25.dp,
-                top = 20.dp,
-                bottom = 20.dp
+                horizontal = 20.dp,
+                vertical = 10.dp
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -55,7 +55,7 @@ fun TaskScreenTaskProgress(
                 Text(
                     text = "Task Progress",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.W700,
                         platformStyle = PlatformTextStyle(
                             includeFontPadding = false
@@ -65,7 +65,7 @@ fun TaskScreenTaskProgress(
                 Text(
                     text = "${completedTask}/${totalTask}",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 13.sp,
                         platformStyle = PlatformTextStyle(
                             includeFontPadding = false
                         )
@@ -80,11 +80,11 @@ fun TaskScreenTaskProgress(
                 ) {
                     Text(
                         modifier = Modifier
-                            .padding(vertical = 6.dp, horizontal = 15.dp),
+                            .padding(vertical = 3.dp, horizontal = 10.dp),
                         text = GetDateTimeHelper().getCurrentDateTime(),
                         style = TextStyle(
                             color = Color.White,
-                            fontSize = 16.sp,
+                            fontSize = 13.sp,
                             platformStyle = PlatformTextStyle(
                                 includeFontPadding = false
                             )
@@ -95,7 +95,7 @@ fun TaskScreenTaskProgress(
             Text(
                 text = "${completeTaskPercent.toInt()}%",
                 style = TextStyle(
-                    fontSize = 25.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.W600,
                     platformStyle = PlatformTextStyle(
                         includeFontPadding = false

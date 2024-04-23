@@ -9,10 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
+@Preview
 fun TakScreenContentHeader() {
     Column(
         modifier = Modifier
@@ -22,7 +24,7 @@ fun TakScreenContentHeader() {
         Text(
             text = "Hi, User!",
             style = TextStyle(
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = false
                 )
@@ -31,7 +33,7 @@ fun TakScreenContentHeader() {
         Text(
             text = "Be productive today",
             style = TextStyle(
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.W600,
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = false

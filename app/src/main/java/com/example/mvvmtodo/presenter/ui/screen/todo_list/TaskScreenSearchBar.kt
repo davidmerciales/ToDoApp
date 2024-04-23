@@ -12,15 +12,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreenSearchBar(
     modifier: Modifier,
     searchText: String,
-    onQueryChange: ()-> Unit,
-    onSearch: ()-> Unit,
+    onQueryChange: () -> Unit,
+    onSearch: () -> Unit,
     list: List<String> = emptyList()
 ) {
     SearchBar(
@@ -33,7 +35,14 @@ fun TaskScreenSearchBar(
         colors = SearchBarDefaults.colors(
             containerColor = Color.LightGray
         ),
-        placeholder = { Text(text = "Search task") },
+        placeholder = {
+            Text(
+                text = "Search task",
+                style = TextStyle(
+                    fontSize = 10.sp
+                )
+            )
+        },
         trailingIcon = {
             Icon(
                 modifier = Modifier.clickable { },

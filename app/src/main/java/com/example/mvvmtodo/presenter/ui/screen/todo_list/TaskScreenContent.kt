@@ -51,7 +51,7 @@ fun TaskScreenContent(
 
             TakScreenContentHeader()
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             TaskScreenSearchBar(
                 modifier = Modifier
@@ -63,7 +63,7 @@ fun TaskScreenContent(
                 onSearch = {}
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             TaskScreenTaskProgress(
                 completedTask = state.completedTask,
@@ -71,7 +71,7 @@ fun TaskScreenContent(
                 completeTaskPercent = state.completedTaskPercentage
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Box(modifier = Modifier
                 .fillMaxWidth(.98f),
@@ -89,7 +89,7 @@ fun TaskScreenContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             TaskScreenTaskList(
                 taskList = state.todos,
