@@ -41,7 +41,6 @@ class TodoListViewModel @Inject constructor(
                 state.completedTaskPercentage = calculateCompletionPercentage(state.todos)
             }
         }
-        Log.d("afasasfasfas", state.completedTaskPercentage.toInt().toString())
     }
 
     fun onEvent(event: ToDoListContract.TodoListEvent) {

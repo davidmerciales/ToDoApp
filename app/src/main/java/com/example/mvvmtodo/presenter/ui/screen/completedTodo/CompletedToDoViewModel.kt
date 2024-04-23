@@ -72,6 +72,12 @@ class CompletedToDoViewModel @Inject constructor(
                     sendUiEvent(NavEvent.Navigate(Routes.TODO_LIST))
                 }
             }
+
+            CompletedToDoContract.CompletedToEvent.OnPopBackClick -> {
+                viewModelScope.launch {
+                    sendUiEvent(NavEvent.PopBackStack)
+                }
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import com.example.mvvmtodo.data.model.Todo
 
 @Database(
     entities = [Todo::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
 

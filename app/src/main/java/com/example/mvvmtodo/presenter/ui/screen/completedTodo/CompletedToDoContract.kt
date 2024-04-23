@@ -13,6 +13,7 @@ class CompletedToDoContract {
         data object OnAddEditTodo : CompletedToEvent
         data object OnUndoDelete : CompletedToEvent
         data object OnToDoNavClick : CompletedToEvent
+        data object OnPopBackClick: CompletedToEvent
     }
 
     interface CompletedToDoState {

@@ -23,6 +23,7 @@ import com.example.mvvmtodo.presenter.theme.Purple40
 
 @Composable
 fun CustomSquareFloatingActionButton(
+    description: String,
     onClick: () -> Unit
 ) {
     Box(modifier = Modifier
@@ -37,7 +38,7 @@ fun CustomSquareFloatingActionButton(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             Text(
-                text = "Add new task",
+                text = description,
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 16.sp,

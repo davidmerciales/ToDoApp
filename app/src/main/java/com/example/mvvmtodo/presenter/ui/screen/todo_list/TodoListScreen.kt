@@ -17,16 +17,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
 fun TaskManagementScreen(
-    viewModel: TodoListViewModel = hiltViewModel()
+    state: ToDoListContract.ToDoListState,
+    onEvent: (ToDoListContract.TodoListEvent)-> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { },
                 navigationIcon = {
+
                     IconButton(
                         onClick = { /*TODO*/ }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "menu")
@@ -44,17 +45,17 @@ fun TaskManagementScreen(
             )
         },
         floatingActionButton = {
-            CustomSquareFloatingActionButton {
-                viewModel.onEvent(ToDoListContract.TodoListEvent.OnAddEditTodo)
+            CustomSquareFloatingActionButton("Add new task") {
+                onEvent(ToDoListContract.TodoListEvent.OnAddEditTodo)
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
-                Content(
-                    padding,
-                    viewModel.state,
-                    viewModel.state.todos,
-                    viewModel::onEvent)
+            TaskScreenContent(
+                padding = padding,
+                state = state,
+                onEvent = onEvent
+            )
         }
     )
 }

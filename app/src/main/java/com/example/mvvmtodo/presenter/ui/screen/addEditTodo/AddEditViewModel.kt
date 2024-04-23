@@ -2,6 +2,8 @@ package com.example.mvvmtodo.presenter.ui.screen.addEditTodo
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
+import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
@@ -35,13 +38,14 @@ class AddEditViewModel @Inject constructor(
                 repository.getTodoById(todoId).let { todo ->
                     state.title = todo.title
                     state.description = todo.description
+                    state.isDone = todo.isDone
                     this@AddEditViewModel.state.todo = todo
                 }
             }
         }
     }
 
-    fun OnEvent(event: AddEditContract.AddEditEvent) {
+    fun onEvent(event: AddEditContract.AddEditEvent) {
         when (event) {
             is AddEditContract.AddEditEvent.OnTitleChange -> {
                 state.title = event.title
@@ -51,12 +55,22 @@ class AddEditViewModel @Inject constructor(
                 state.description = event.description
             }
 
+            AddEditContract.AddEditEvent.OnCompletedChange -> {
+                state.isDone = !state.isDone
+            }
+
             is AddEditContract.AddEditEvent.OnPriorityChange -> {
                 state.priority = event.priority
             }
 
             is AddEditContract.AddEditEvent.OnSaveTodo -> {
                 val currentDateTime = LocalDateTime.now().toDateString()
+
+                state.taskColor = Color(
+                    Random.nextInt(256),
+                    Random.nextInt(256),
+                    Random.nextInt(256)
+                ).toArgb()
 
                 viewModelScope.launch {
                     if (state.title.isBlank()) {
@@ -70,7 +84,8 @@ class AddEditViewModel @Inject constructor(
                             isDone = state.isDone,
                             date = currentDateTime,
                             priority = state.priority,
-                            id = state.todo?.id
+                            id = state.todo?.id,
+                            color = state.taskColor
                         ), state.isDone
                     )
                     sendUiEvent(NavEvent.PopBackStack)

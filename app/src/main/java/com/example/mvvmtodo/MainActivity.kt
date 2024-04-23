@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,10 +23,13 @@ import com.example.mvvmtodo.presenter.theme.MVVMToDoTheme
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
 import com.example.mvvmtodo.presenter.ui.navigation.CollectMessages
 import com.example.mvvmtodo.presenter.ui.navigation.CollectRoutes
+import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.AddEditViewModel
 import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.TaskAddEditScreen
-import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoScreen
+import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoViewModel
+import com.example.mvvmtodo.presenter.ui.screen.completedTodo.TaskManagementCompletedScreen
 import com.example.mvvmtodo.presenter.ui.screen.login.LoginScreen
 import com.example.mvvmtodo.presenter.ui.screen.todo_list.TaskManagementScreen
+import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListViewModel
 import com.example.mvvmtodo.utils.Routes
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -46,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.LOGIN
+                    startDestination = Routes.TODO_LIST
                 ) {
 
                     composable(Routes.LOGIN) {
@@ -54,10 +58,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(Routes.TODO_LIST) {
-                        TaskManagementScreen()
-//                        TodoListScreen(
-//                            appController = appController
-//                        )
+                        val viewModel: TodoListViewModel = hiltViewModel()
+                        TaskManagementScreen(
+                            state = viewModel.state,
+                            onEvent = viewModel::onEvent
+                        )
                     }
                     composable(
                         route = Routes.ADD_EDIT_TODO + "?todoId={todoId}",
@@ -68,14 +73,20 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
-//                        AddEditScreen(onPopBackStack = {
-//                            navController.popBackStack()
-//                        }, appController = appController)
-                        TaskAddEditScreen(onPopBackStack = { navController.popBackStack() })
+                        val viewModel: AddEditViewModel = hiltViewModel()
+                        TaskAddEditScreen(
+                            state = viewModel.state,
+                            onEvent = viewModel::onEvent,
+                            appController = appController,
+                            onPopBackStack = { navController.popBackStack() })
                     }
 
                     composable(Routes.COMPLETED_TODO) {
-                        CompletedToDoScreen(appController = appController)
+                        val viewModel: CompletedToDoViewModel = hiltViewModel()
+                        TaskManagementCompletedScreen(
+                            state = viewModel.state,
+                            onEvent = viewModel::onEvent
+                        )
                     }
                 }
             }
