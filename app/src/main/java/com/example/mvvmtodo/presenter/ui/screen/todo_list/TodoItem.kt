@@ -173,7 +173,7 @@ fun TodoItem(
         }
 
         Spacer(modifier = Modifier.height(height))
-        val date = item.date.stringToDate().stringToDateMonthDay()
+        val date = item.date.stringToDate("yyyy-MM-dd-HH-mm").stringToDateMonthDay()
         Text(
             text = "Due: $date", style = TextStyle(
                 color = Color.White,

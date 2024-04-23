@@ -3,6 +3,7 @@ package com.example.mvvmtodo.presenter.ui.screen.todo_list
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,12 +28,12 @@ import com.example.mvvmtodo.presenter.theme.Purple40
 import com.example.mvvmtodo.utils.GetDateTimeHelper
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview
 @Composable
 fun TaskScreenTaskProgress(
-    completedTask: Int = 1,
-    totalTask: Int = 1,
-    completeTaskPercent: Double = 0.0
+    completedTask: Int,
+    totalTask: Int,
+    completeTaskPercent: Double,
+    onClick: ()-> Unit
 ) {
 
     Box(
@@ -77,11 +78,14 @@ fun TaskScreenTaskProgress(
                 Box(
                     modifier = Modifier
                         .background(Purple40, RoundedCornerShape(20.dp))
+                        .clickable {
+                            onClick()
+                        }
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(vertical = 3.dp, horizontal = 10.dp),
-                        text = GetDateTimeHelper().getCurrentDateTime(),
+                        text = GetDateTimeHelper().getCurrentDateTime("MMM dd"),
                         style = TextStyle(
                             color = Color.White,
                             fontSize = 13.sp,

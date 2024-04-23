@@ -12,9 +12,9 @@ import java.util.Date
 class GetDateTimeHelper {
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getCurrentDateTime(): String {
+    fun getCurrentDateTime(pattern: String): String {
         val currentDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("MMM dd")
+        val formatter = DateTimeFormatter.ofPattern(pattern)
         return currentDateTime.format(formatter)
     }
 }
@@ -27,8 +27,8 @@ fun LocalDateTime.toDateString(): String {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun String.stringToDate(): LocalDateTime {
-    val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm")
+fun String.stringToDate(pattern: String): LocalDateTime {
+    val dateFormat = DateTimeFormatter.ofPattern(pattern)
     return LocalDateTime.parse(this, dateFormat)
 }
 

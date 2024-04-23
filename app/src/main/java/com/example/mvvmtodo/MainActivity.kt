@@ -28,6 +28,8 @@ import com.example.mvvmtodo.presenter.ui.screen.addEditTodo.TaskAddEditScreen
 import com.example.mvvmtodo.presenter.ui.screen.completedTodo.CompletedToDoViewModel
 import com.example.mvvmtodo.presenter.ui.screen.completedTodo.TaskManagementCompletedScreen
 import com.example.mvvmtodo.presenter.ui.screen.login.LoginScreen
+import com.example.mvvmtodo.presenter.ui.screen.todayTask.screen.TodayTaskScreen
+import com.example.mvvmtodo.presenter.ui.screen.todayTask.viewmodel.TodayTaskViewModel
 import com.example.mvvmtodo.presenter.ui.screen.todo_list.TaskManagementScreen
 import com.example.mvvmtodo.presenter.ui.screen.todo_list.TodoListViewModel
 import com.example.mvvmtodo.utils.Routes
@@ -86,6 +88,14 @@ class MainActivity : ComponentActivity() {
                         TaskManagementCompletedScreen(
                             state = viewModel.state,
                             onEvent = viewModel::onEvent
+                        )
+                    }
+
+                    composable(Routes.TODAY_TASK) {
+                        val viewModel: TodayTaskViewModel = hiltViewModel()
+                        TodayTaskScreen(
+                            state = viewModel.state,
+                            onEvent = viewModel::onEvent    
                         )
                     }
                 }

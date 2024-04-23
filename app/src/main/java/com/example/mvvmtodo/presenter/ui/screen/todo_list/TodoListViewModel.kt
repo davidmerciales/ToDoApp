@@ -100,6 +100,12 @@ class TodoListViewModel @Inject constructor(
                     sendUiEvent(NavEvent.Navigate(Routes.COMPLETED_TODO))
                 }
             }
+
+            ToDoListContract.TodoListEvent.OnDateTodayClick -> {
+                viewModelScope.launch {
+                    sendUiEvent(NavEvent.Navigate(Routes.TODAY_TASK))
+                }
+            }
         }
     }
 

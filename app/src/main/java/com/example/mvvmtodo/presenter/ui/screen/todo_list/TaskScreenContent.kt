@@ -69,7 +69,9 @@ fun TaskScreenContent(
                 completedTask = state.completedTask,
                 totalTask = state.todos.size,
                 completeTaskPercent = state.completedTaskPercentage
-            )
+            ){
+                onEvent(ToDoListContract.TodoListEvent.OnDateTodayClick)
+            }
 
             Spacer(modifier = Modifier.height(10.dp))
 

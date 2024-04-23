@@ -18,6 +18,7 @@ class ToDoListContract {
         data object OnAddEditTodo : TodoListEvent
         data object OnUndoDelete : TodoListEvent
         data object OnCompletedNavClick : TodoListEvent
+        data object OnDateTodayClick: TodoListEvent
     }
 
     interface ToDoListState {
