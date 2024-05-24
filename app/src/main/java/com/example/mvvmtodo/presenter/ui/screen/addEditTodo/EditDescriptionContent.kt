@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,14 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 
 @Composable
+@Preview
 fun EditDescriptionContent(
-    description: String,
-    onDescriptionChange: (String)-> Unit
+    description: String = "Test",
+    onDescriptionChange: (String)-> Unit = {}
 ) {
     Text(
         modifier = Modifier
@@ -32,7 +35,7 @@ fun EditDescriptionContent(
             .zIndex(1f),
         text = "Descriptions",
         style = TextStyle(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 20.sp,
             fontWeight = FontWeight.W500,
             platformStyle = PlatformTextStyle(
@@ -55,7 +58,11 @@ fun EditDescriptionContent(
                 onDescriptionChange(description)
             },
             shape = RoundedCornerShape(10.dp),
-            label = { Text(text = "Enter description") },
+            label = {
+                Text(
+                    text = "Enter description",
+                    color = MaterialTheme.colorScheme.onBackground
+            ) },
             singleLine = false,
             minLines = 5,
             maxLines = 5

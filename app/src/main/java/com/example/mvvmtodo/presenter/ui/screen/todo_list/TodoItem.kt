@@ -6,20 +6,23 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
@@ -66,7 +69,7 @@ fun TodoItem(
                     top.linkTo(parent.top, margin = 8.dp)
                     start.linkTo(parent.start, margin = 10.dp)
                 },
-                text = todo.date,
+                text = todo.dateCreated,
                 fontSize = 10.sp
             )
             Text(
@@ -112,19 +115,19 @@ fun TodoItem(
                     },
                 text = todo.description
             )
-
-            Checkbox(
-                modifier = Modifier
-                    .fillMaxWidth(.1f)
-                    .constrainAs(checkBox) {
-                        top.linkTo(txtDate.bottom)
-                        start.linkTo(parent.end)
-                    },
-                checked = todo.isDone,
-                onCheckedChange = {
-                    onEvent(ToDoListContract.TodoListEvent.OnDoneTodo(todo, it))
-                }
-            )
+//
+//            Checkbox(
+//                modifier = Modifier
+//                    .fillMaxWidth(.1f)
+//                    .constrainAs(checkBox) {
+//                        top.linkTo(txtDate.bottom)
+//                        start.linkTo(parent.end)
+//                    },
+//                checked = todo.isDone,
+//                onCheckedChange = {
+//                    onEvent(ToDoListContract.TodoListEvent.OnDoneTodo(todo, it))
+//                }
+//            )
         }
     }
 }
@@ -132,7 +135,7 @@ fun TodoItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TodoItem(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     height: Dp,
     item: Todo
 ) {
@@ -171,9 +174,36 @@ fun TodoItem(
                 )
             )
         }
+        Spacer(modifier = Modifier.height(40.dp))
 
-        Spacer(modifier = Modifier.height(height))
-        val date = item.date.stringToDate("yyyy-MM-dd-HH-mm").stringToDateMonthDay()
+        LinearProgressIndicator(progress = item.progress)
+
+        Row(modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            Text(
+                modifier = Modifier
+                    .weight(0.8f),
+                text = "Progress",
+                style = TextStyle(
+                    color = Color.White,
+                    fontSize = 14.sp,
+                )
+            )
+
+            Text(
+                modifier = Modifier
+                    .weight(0.18f),
+                text = "${(item.progress * 100).toInt()}%",
+                style = TextStyle(
+                    color = Color.White,
+                    fontSize = 14.sp,
+                )
+            )
+        }
+        Spacer(modifier = Modifier.height(40.dp))
+
+        val date = item.dateCreated.stringToDate("yyyy-MM-dd-HH-mm").stringToDateMonthDay()
         Text(
             text = "Due: $date", style = TextStyle(
                 color = Color.White,

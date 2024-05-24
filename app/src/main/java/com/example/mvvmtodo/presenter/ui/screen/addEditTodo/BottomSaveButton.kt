@@ -20,21 +20,19 @@ import com.example.mvvmtodo.presenter.theme.Purple40
 
 @Composable
 fun BottomSaveButton(
+    title: String = "Save",
+    modifier: Modifier,
     onClick: ()-> Unit
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.075f)
-            .padding(horizontal = 15.dp)
-            .background(Purple40, RoundedCornerShape(15.dp))
+        modifier = modifier
             .clickable {
                 onClick()
             },
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Save",
+            text = title,
             style = TextStyle(
                 color = Color.White,
                 fontSize = 20.sp,

@@ -51,7 +51,7 @@ fun CompletedToDoItem(
                     top.linkTo(parent.top, margin = 8.dp)
                     start.linkTo(parent.start, margin = 10.dp)
                 },
-                text = todo.date,
+                text = todo.dateCreated,
                 fontSize = 10.sp
             )
             Text(
@@ -107,7 +107,9 @@ fun CompletedToDoItem(
                     },
                 checked = todo.isDone,
                 onCheckedChange = {
-                    onEvent(CompletedToDoContract.CompletedToEvent.OnDoneTodo(todo, it))
+                    onEvent(CompletedToDoContract.CompletedToEvent.OnDoneTodo(todo.copy(
+                        progress = 0.9f
+                    ), it))
                 }
             )
         }

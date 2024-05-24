@@ -2,11 +2,13 @@ package com.example.mvvmtodo.presenter.ui.screen.addEditTodo
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
+import com.example.mvvmtodo.data.model.Subtask
 import com.example.mvvmtodo.data.model.Todo
+import com.example.mvvmtodo.data.model.TodoWithSubtask
 
 class AddEditContract {
 
@@ -14,16 +16,22 @@ class AddEditContract {
         data class OnTitleChange(val title: String) : AddEditEvent
 
         data class OnDescriptionChange(val description: String) : AddEditEvent
+        data class OnSubTaskDescriptionChange(val subtaskDescription: String) : AddEditEvent
 
         data object OnCompletedChange : AddEditEvent
+        data class OnSubTaskCompletedChange(val isDone: Boolean, val taskId: Long) : AddEditEvent
 
         data class OnPriorityChange(val priority: Int) : AddEditEvent
 
         data object OnSaveTodo : AddEditEvent
+        data object OnSaveSubTask : AddEditEvent
+        data class OnProgressChange(val progress: Float) : AddEditEvent
+        data object OnProgressFinished : AddEditEvent
     }
 
     interface AddEditState {
         var todo: Todo?
+        var todos: List<Subtask>
         var title: String
         var description: String
         var priority: Int
@@ -33,10 +41,16 @@ class AddEditContract {
         var priorities: List<String>
         var snackbarHostState: SnackbarHostState
         var isDone: Boolean
+        var progress: Float
+        var isSubtask: Boolean
+        var subtaskDescription: String
+        var isSubtaskDone: Boolean
+        var subtasks: List<Subtask>
     }
 
     class MutableAddEditState : AddEditState {
         override var todo: Todo? by mutableStateOf(null)
+        override var todos: List<Subtask> by mutableStateOf(emptyList())
         override var title: String by mutableStateOf("")
         override var description: String by mutableStateOf("")
         override var priority: Int by mutableIntStateOf(0)
@@ -53,5 +67,10 @@ class AddEditContract {
         )
         override var snackbarHostState: SnackbarHostState = SnackbarHostState()
         override var isDone: Boolean by mutableStateOf(false)
+        override var progress: Float by mutableFloatStateOf(0f)
+        override var isSubtask: Boolean by mutableStateOf(false)
+        override var subtaskDescription: String by mutableStateOf("")
+        override var isSubtaskDone: Boolean by mutableStateOf(false)
+        override var subtasks: List<Subtask> by mutableStateOf(emptyList())
     }
 }

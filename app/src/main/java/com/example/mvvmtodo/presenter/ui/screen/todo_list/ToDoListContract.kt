@@ -12,7 +12,7 @@ class ToDoListContract {
 
     sealed interface TodoListEvent {
         data class OnDeleteTodo(val todo: Todo) : TodoListEvent
-        data class OnDoneTodo(val todo: Todo, val isChecked: Boolean) : TodoListEvent
+        data class OnDoneTodo(val todo: Todo, val isChecked: Boolean, val progress: Float) : TodoListEvent
         data class OnTodoItemClick(val todo: Todo) : TodoListEvent
         data class OnSortClick(val sort: Int? = 0) : TodoListEvent
         data object OnAddEditTodo : TodoListEvent

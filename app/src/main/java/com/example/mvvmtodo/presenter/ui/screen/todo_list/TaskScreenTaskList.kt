@@ -31,7 +31,7 @@ fun TaskScreenTaskList(
         taskList?.let { list->
             items(list) { task ->
                 val randomHeight = Random.nextInt(100, 300)
-                if (!task.isDone) {
+                if (!task.isDone && !task.isSubtask) {
                     TodoItem(
                         modifier = Modifier
                             .padding(5.dp)

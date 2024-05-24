@@ -2,7 +2,11 @@ package com.example.mvvmtodo.presenter.ui.screen.addEditTodo
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -17,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mvvmtodo.NavigationContext
@@ -44,7 +49,6 @@ fun TaskAddEditScreen(
                     ),
                     title = {
                         Text(
-                            modifier = Modifier.fillMaxWidth(),
                             text = "Details",
                             style = TextStyle(
                                 color = Color.White,
@@ -67,26 +71,17 @@ fun TaskAddEditScreen(
             content = {
                 AddEditScreenContent(
                     paddingValues = it,
-                    title = state.title,
-                    description = state.description,
-                    onTitleChange = { title ->
-                        onEvent(AddEditContract.AddEditEvent.OnTitleChange(title))
-                    },
-                    onDescriptionChange = { description ->
-                        onEvent(
-                            AddEditContract.AddEditEvent.OnDescriptionChange(
-                                description
-                            )
-                        )
-                    },
-                    isComplete = state.isDone,
-                    onCompletedChange = {
-                        onEvent(AddEditContract.AddEditEvent.OnCompletedChange)
-                    }
+                    state = state,
+                    onEvent = onEvent
                 )
             },
             bottomBar = {
-                BottomSaveButton {
+                BottomSaveButton(
+                    modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.075f)
+                    .padding(horizontal = 15.dp)
+                    .background(Purple40, RoundedCornerShape(15.dp))) {
                     onEvent(AddEditContract.AddEditEvent.OnSaveTodo)
                 }
             }

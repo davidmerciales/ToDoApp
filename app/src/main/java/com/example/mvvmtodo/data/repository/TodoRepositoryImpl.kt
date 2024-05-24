@@ -1,7 +1,9 @@
 package com.example.mvvmtodo.data.repository
 
 import com.example.mvvmtodo.data.dao.TodoDao
+import com.example.mvvmtodo.data.model.Subtask
 import com.example.mvvmtodo.data.model.Todo
+import com.example.mvvmtodo.data.model.TodoWithSubtask
 import com.example.mvvmtodo.domain.repository.TodoRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -23,8 +25,16 @@ class TodoRepositoryImpl(private val dao: TodoDao) : TodoRepository {
         return dao.getSortedTodosByRecent()
     }
 
+    override suspend fun getTodoWithSubtask(taskId: Int): Flow<List<TodoWithSubtask>> {
+        return dao.getTodoWithSubtask(taskId)
+    }
+
     override suspend fun insertTodo(todo: Todo) {
         dao.insertTodo(todo)
+    }
+
+    override suspend fun insertSubTask(subtask: List<Subtask>) {
+        dao.insertSubtask(subtask)
     }
 
     override suspend fun deleteTodo(todo: Todo) {
