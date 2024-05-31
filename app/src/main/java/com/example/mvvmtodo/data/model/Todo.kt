@@ -19,15 +19,6 @@ data class Todo(
     @PrimaryKey val id: Int? = null
 )
 
-@Entity
-data class Subtask(
-    @PrimaryKey val subTaskID: Long? = null,
-    val todoID: Int,
-    val description: String,
-    val dateCreated: String,
-    val isDone: Boolean,
-)
-
 data class TodoWithSubtask(
     @Embedded val todo: Todo,
     @Relation(

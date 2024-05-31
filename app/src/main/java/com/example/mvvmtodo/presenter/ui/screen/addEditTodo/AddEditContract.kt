@@ -24,9 +24,10 @@ class AddEditContract {
         data class OnPriorityChange(val priority: Int) : AddEditEvent
 
         data object OnSaveTodo : AddEditEvent
-        data object OnSaveSubTask : AddEditEvent
+        data class OnSaveSubTask(val subtaskId: Int) : AddEditEvent
         data class OnProgressChange(val progress: Float) : AddEditEvent
         data object OnProgressFinished : AddEditEvent
+        data class OnDeleteSubtask(val id: Int): AddEditEvent
     }
 
     interface AddEditState {

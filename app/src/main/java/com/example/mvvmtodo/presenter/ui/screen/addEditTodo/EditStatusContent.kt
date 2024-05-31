@@ -75,21 +75,6 @@ fun EditStatusContent(
                     .height(7.dp)
                     .weight(0.5f),
                     progress = progress)
-
-//            Slider(
-//                modifier = Modifier
-//                    .weight(0.5f),
-//                enabled = false,
-//                colors = SliderDefaults.colors(
-//                    disabledActiveTrackColor = Color.Blue,
-//                    disabledThumbColor = Color.Blue
-//                ),
-//                value = progress,
-//                onValueChange = { onProgressChange(it) },
-//                onValueChangeFinished = {
-//                    onProgressFinished()
-//                })
-
             Text(
                 modifier = Modifier
                     .weight(0.1f)

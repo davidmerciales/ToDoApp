@@ -35,6 +35,9 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubtask(subtask: List<Subtask>)
 
+    @Query("Delete from subtask where subTaskID = :id")
+    suspend fun deleteSubtaskById(id: Int?)
+
     @Delete
     suspend fun deleteTodo(todo: Todo)
 

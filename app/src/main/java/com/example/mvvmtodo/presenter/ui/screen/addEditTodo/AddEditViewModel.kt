@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mvvmtodo.data.model.Subtask
 import com.example.mvvmtodo.data.model.Todo
-import com.example.mvvmtodo.data.model.TodoWithSubtask
 import com.example.mvvmtodo.domain.repository.TodoRepository
+import com.example.mvvmtodo.domain.usecase.todolist.DeleteSubtaskByIdUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.InsertSubTaskUseCase
 import com.example.mvvmtodo.domain.usecase.todolist.InsertToDoUseCase
 import com.example.mvvmtodo.presenter.ui.navigation.AppController
@@ -31,6 +31,7 @@ class AddEditViewModel @Inject constructor(
     private val repository: TodoRepository,
     private val insertToDoUseCase: InsertToDoUseCase,
     private val insertSubTaskUseCase: InsertSubTaskUseCase,
+    private val deleteSubtaskByIdUseCase: DeleteSubtaskByIdUseCase,
     savedStateHandle: SavedStateHandle,
     appController: AppController
 ) : ViewModel(), MyController by appController {
@@ -79,6 +80,12 @@ class AddEditViewModel @Inject constructor(
                 state.subtaskDescription = event.subtaskDescription
             }
 
+            is AddEditContract.AddEditEvent.OnDeleteSubtask-> {
+                viewModelScope.launch {
+                    deleteSubtaskByIdUseCase(event.id)
+                }
+            }
+
             AddEditContract.AddEditEvent.OnCompletedChange -> {
                 state.isDone = !state.isDone
                 if (state.isDone){
@@ -89,14 +96,11 @@ class AddEditViewModel @Inject constructor(
             }
 
             is AddEditContract.AddEditEvent.OnSubTaskCompletedChange -> {
-                Log.d("onEvents: ", "zxc: ")
                 state.subtasks = state.subtasks.map { subtask ->
                     if (subtask.subTaskID == event.taskId) {
-                        Log.d("onEvents: ", "true: ")
-                        subtask.copy(isDone = !event.isDone)
+                        subtask.copy(isDone = event.isDone)
                     } else {
-                        Log.d("onEvents: ", "false: ")
-                        subtask
+                        subtask.copy()
                     }
                 }
             }
@@ -105,16 +109,33 @@ class AddEditViewModel @Inject constructor(
                 state.priority = event.priority
             }
 
-            AddEditContract.AddEditEvent.OnSaveSubTask -> {
+            is AddEditContract.AddEditEvent.OnSaveSubTask -> {
                 val currentDateTime = LocalDateTime.now().toDateString()
-                state.subtasks = state.subtasks.plus(
-                    Subtask(
-                        todoID = state.todo?.id?:-1,
-                        description = state.subtaskDescription,
-                        dateCreated = currentDateTime,
-                        isDone = state.isSubtaskDone
+                if (event.subtaskId != -1){
+                    state.subtasks = state.subtasks.map { subtask ->
+                        if (subtask.subTaskID?.toInt() == event.subtaskId){
+                            subtask.copy(description = state.subtaskDescription)
+                        }else{
+                            subtask.copy()
+                        }
+                    }
+
+                }else {
+                    state.subtasks = state.subtasks.plus(
+                        Subtask(
+                            todoID = state.todo?.id ?: -1,
+                            description = state.subtaskDescription,
+                            dateCreated = currentDateTime,
+                            isDone = state.isSubtaskDone
+                        )
                     )
-                )
+                }
+
+                viewModelScope.launch {
+                    insertSubTaskUseCase.invoke(
+                        state.subtasks
+                    )
+                }
 //                viewModelScope.launch {
 //                    insertSubTaskUseCase.invoke(
 //                        Subtask(
@@ -125,6 +146,8 @@ class AddEditViewModel @Inject constructor(
 //                        )
 //                    )
 //                }
+                state.subtaskDescription = ""
+                Log.d("onEvent: ", state.todo?.id.toString())
             }
 
             is AddEditContract.AddEditEvent.OnSaveTodo -> {

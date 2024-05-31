@@ -20,6 +20,7 @@ interface TodoRepository {
     suspend fun getSortedTodosByAsc(): List<Todo>
 
     suspend fun getSortedTodosByRecent(): List<Todo>
+    suspend fun deleteSubtaskById(id: Int?)
 
     fun getTodos(): Flow<List<Todo>>
 }

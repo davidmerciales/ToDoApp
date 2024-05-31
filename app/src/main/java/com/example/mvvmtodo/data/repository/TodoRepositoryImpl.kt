@@ -25,6 +25,9 @@ class TodoRepositoryImpl(private val dao: TodoDao) : TodoRepository {
         return dao.getSortedTodosByRecent()
     }
 
+    override suspend fun deleteSubtaskById(id: Int?) {
+        dao.deleteSubtaskById(id)
+    }
     override suspend fun getTodoWithSubtask(taskId: Int): Flow<List<TodoWithSubtask>> {
         return dao.getTodoWithSubtask(taskId)
     }
