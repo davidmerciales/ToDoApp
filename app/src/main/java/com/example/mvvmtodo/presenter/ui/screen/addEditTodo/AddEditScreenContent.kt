@@ -108,7 +108,6 @@ fun AddEditScreenContent(
                 isComplete = state.isDone,
                 progress = state.progress,
                 onCompletedChange = { onEvent(AddEditContract.AddEditEvent.OnCompletedChange) },
-                onProgressChange = { onEvent(AddEditContract.AddEditEvent.OnProgressChange(it)) },
                 onProgressFinished = { onEvent(AddEditContract.AddEditEvent.OnProgressFinished) }
             )
 

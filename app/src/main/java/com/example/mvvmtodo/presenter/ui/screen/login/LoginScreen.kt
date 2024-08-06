@@ -57,7 +57,7 @@ fun LoginScreen(
             },
             value = viewModel.state.email,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            onValueChange = {
+        onValueChange = {
                 viewModel.state.email = it
             },
             leadingIcon = {

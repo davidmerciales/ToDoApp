@@ -36,7 +36,6 @@ fun EditStatusContent(
     isComplete: Boolean = true,
     progress: Float = 0f,
     onCompletedChange: ()-> Unit = {},
-    onProgressChange: (Float)-> Unit ={},
     onProgressFinished: ()-> Unit = {}
 ) {
     Column (

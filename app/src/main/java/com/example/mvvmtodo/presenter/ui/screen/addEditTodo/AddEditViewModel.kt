@@ -53,6 +53,21 @@ class AddEditViewModel @Inject constructor(
         }
 
         initGetTodos(todoId)
+        calculateProgress()
+    }
+
+    private fun calculateProgress() {
+        val totalSubtasks = state.subtasks.size
+        val completedSubtasks = state.subtasks.count { it.isDone }
+
+        state.progress = if (totalSubtasks > 0) {
+            (completedSubtasks.toFloat() / totalSubtasks)
+        } else {
+            0f
+        }
+
+        state.isDone = state.progress == 100f
+
     }
 
     private fun initGetTodos(todoId: Int?) = viewModelScope.launch {
@@ -89,10 +104,15 @@ class AddEditViewModel @Inject constructor(
             AddEditContract.AddEditEvent.OnCompletedChange -> {
                 state.isDone = !state.isDone
                 if (state.isDone){
-                    state.progress = 1f
+                    state.subtasks = state.subtasks.map { subtask->
+                        subtask.copy(isDone = state.isDone)
+                    }
                 }else{
-                    state.progress = 0f
+                    state.subtasks = state.subtasks.map { subtask->
+                        subtask.copy(isDone = state.isDone)
+                    }
                 }
+                calculateProgress()
             }
 
             is AddEditContract.AddEditEvent.OnSubTaskCompletedChange -> {
@@ -103,6 +123,7 @@ class AddEditViewModel @Inject constructor(
                         subtask.copy()
                     }
                 }
+                calculateProgress()
             }
 
             is AddEditContract.AddEditEvent.OnPriorityChange -> {
@@ -136,16 +157,7 @@ class AddEditViewModel @Inject constructor(
                         state.subtasks
                     )
                 }
-//                viewModelScope.launch {
-//                    insertSubTaskUseCase.invoke(
-//                        Subtask(
-//                            todoID = state.todo?.id?:-1,
-//                            description = state.subtaskDescription,
-//                            dateCreated = currentDateTime,
-//                            isDone = false
-//                        )
-//                    )
-//                }
+
                 state.subtaskDescription = ""
                 Log.d("onEvent: ", state.todo?.id.toString())
             }
@@ -192,15 +204,15 @@ class AddEditViewModel @Inject constructor(
             }
 
             is AddEditContract.AddEditEvent.OnProgressChange -> {
-                state.progress = event.progress
                 if (state.isDone && state.progress!=1f){
                     state.isDone = false
                 }
+                calculateProgress()
             }
 
             AddEditContract.AddEditEvent.OnProgressFinished -> {
-                if (state.progress == 1f)
-                    state.isDone = true
+                state.isDone = true
+                calculateProgress()
             }
         }
 
